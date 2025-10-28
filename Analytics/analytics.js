@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const labels = Object.keys(categoryTotals);
   const values = Object.values(categoryTotals);
 
-  //using chart js, this creates the pie chart
+  //using chart js, this creates the donut
+  //  chart
   if (labels.length === 0) {
     const empty = document.createElement("div");
     empty.style.padding = "1rem";
