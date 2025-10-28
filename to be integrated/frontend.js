@@ -7,33 +7,45 @@ const amountInput = document.getElementById("amount-input");
 const dateInput = document.getElementById("date-input");
 const categoryInput = document.getElementById("category-select");
 
+//global array of strings for category names
 var categories = [];
 
+//add category and update the category dropdown option
 function add_category(name) {
 	if (categories.includes(name)) return -1;
 	categories.push(name);
 	const cat_select = document.getElementById("category-select");
-	const cat_option = document.createElement("option");
+	const cat_option = document.createElement("option"); //update category dropdown
 	cat_option.value = name;
 	cat_option.textContent = name;
 	cat_select.appendChild(cat_option);
 }
-
+//default category
 add_category("None");
 
+//list of gathered analytics, see analytic_struct below
 var category_analytics_list = [];
+//list of all transactions, see transac_struct below
+var transac_list = [];
 function transac_struct(category_id, amount, name, date) {
 	this.category_id = category_id;
 	this.amount = amount;
 	this.name = name;
 	this.date = date;
 }
-var transac_list = [];
 function analytic_struct(total_amount, num_of_transactions) {
 	this.total_amount = total_amount;
 	this.num_of_transactions = num_of_transactions;
+	//add more probably
 }
 
+//updating the charts requires destroying and recreating them, therefore the chart object needs to be passed into the function
+// chart_obj - the chart returned by this function
+// canvas - canvas html element that will hold the graph
+// type - string, type of graph
+// labels - data labels
+// dataset - the actual data
+// title - will be displayed at the top of the graph
 function update_chart(chart_obj, canvas, type, labels, dataset, title) {
 	if (chart_obj) chart_obj.destroy();
 	chart_obj = new Chart(canvas, {
@@ -61,9 +73,11 @@ function update_chart(chart_obj, canvas, type, labels, dataset, title) {
 
 const pie_chart1 = document.getElementById("pieChart1");
 const pie_chart2 = document.getElementById("pieChart2");
-var pie_chart1_obj;
+var pie_chart1_obj; //i think these have to be global to properly update the graphs
 var pie_chart2_obj;
 
+//this function takes the data from category_analytics_list which holds the total expenses and number of transactions per category and arranges
+// it appropriately for chart.js pie graphs to use, and then it creates the graphs
 function setup_pie_chart() {
 	let pie_labels = [];
 	let total_expenses = [];
@@ -94,7 +108,9 @@ function setup_pie_chart() {
 }
 
 const analytics_div = document.getElementById("analytics-here");
-var html_analytics_list = [];
+//var html_analytics_list = []; //dont think this is used
+
+//this is essentially just a text version of the pie graphs, will probably remove soon
 function update_analytics_list_html() {
 	analytics_div.innerHTML = "";
 	for (let i = 0; i < categories.length; i++) {
@@ -113,6 +129,8 @@ function update_analytics_list_html() {
 	setup_pie_chart();
 }
 
+//this function updates the category_analytics_list used to store data for per category analytics
+// index - index of the category in the category array, gotta change this to just compare strings soon
 function update_category(index) {
 	var total_amnt = 0;
 	var num_transac = 0;
@@ -126,6 +144,7 @@ function update_category(index) {
 	category_analytics_list[index] = new analytic_struct(total_amnt, num_transac);
 }
 
+//add a new transaction to the transac_list and update all analytics
 function add_transaction(category_id, amount, name, date) {
 	let created = new transac_struct(category_id, amount, name, date);
 	transac_list.push(created);
@@ -134,9 +153,13 @@ function add_transaction(category_id, amount, name, date) {
 	return created;
 }
 
-const fileInput = document.getElementById("upload");
-const table = document.getElementById("table");
+const fileInput = document.getElementById("upload"); //upload csv button
+const table = document.getElementById("table"); //where the csv table will be generated in HTML
 
+/*
+	This is the function that parses the csv and creates the table in HTML
+	str - string that contains the entire csv contents
+*/
 function csv_parse_from_string(str) {
 	table.innerHTML = "";
 	let rows = str.split("\n");
@@ -155,9 +178,13 @@ function csv_parse_from_string(str) {
 let selected_column;
 let csv_mode = 0; //0 - select column, 1 - set row to be ignored
 
+//radio buttons for switching the mode between selecting individual columns or toggling rows to be ignored
 const radio_mode0 = document.getElementById("mode0");
 const radio_mode1 = document.getElementById("mode1");
 
+/*
+	These event listeners just handle the radio button inputs so that they change the mode
+*/
 radio_mode0.addEventListener("change", (e) => {
 	if (radio_mode0.checked) {
 		csv_mode = 0;
@@ -170,6 +197,11 @@ radio_mode1.addEventListener("change", (e) => {
 	}
 });
 
+/*
+	When clicking on the csv HTML table, this iterates through each cell and has different behavior depending upon the mode
+		csv_mode = 0 - add the "selected" class to every cell in the entire column, removing it from other columns if they exist
+		csv_mode = 1 - toggle the "ignoring" class for a row in case it shouldn't be included as a transaction
+*/
 table.addEventListener("mousedown", (e) => {
 	if (e.target.tagName == "TD") {
 		selected_column = e.target.cellIndex;
@@ -196,11 +228,16 @@ table.addEventListener("mousedown", (e) => {
 	}
 });
 
+// Buttons for setting column attributes
 const btnCategory = document.getElementById("btnCategory");
 const btnAmount = document.getElementById("btnAmount");
 const btnLabel = document.getElementById("btnLabel");
 const btnDate = document.getElementById("btnDate");
 
+/*
+	csv_category - this column contains the categories of the transactions and will either assign the
+	row to an existing category or create a new one if it doesnt already exist
+*/
 btnCategory.addEventListener("click", (e) => {
 	for (let r = 0; r < table.rows.length; r++) {
 		const row = table.rows[r];
@@ -216,6 +253,9 @@ btnCategory.addEventListener("click", (e) => {
 	}
 });
 
+/*
+	csv_amount - this column contains transaction amounts
+*/
 btnAmount.addEventListener("click", (e) => {
 	for (let r = 0; r < table.rows.length; r++) {
 		const row = table.rows[r];
@@ -231,6 +271,9 @@ btnAmount.addEventListener("click", (e) => {
 	}
 });
 
+/*
+	csv_label - this column contains the names of the transactions as you normally see on bank statements
+*/
 btnLabel.addEventListener("click", (e) => {
 	for (let r = 0; r < table.rows.length; r++) {
 		const row = table.rows[r];
@@ -246,6 +289,9 @@ btnLabel.addEventListener("click", (e) => {
 	}
 });
 
+/*
+	csv_date - date of the transaction
+*/
 btnDate.addEventListener("click", (e) => {
 	for (let r = 0; r < table.rows.length; r++) {
 		const row = table.rows[r];
@@ -261,6 +307,10 @@ btnDate.addEventListener("click", (e) => {
 	}
 });
 
+/*
+	on Finalize, iterate through each row, then retrieve category, amount, date and name/label by iterating through each cell in the row and searching
+	for the respective html classes, then finally create the transaction for that row before moving onto the next
+*/
 const btnFinalize = document.getElementById("btnFinalize");
 btnFinalize.addEventListener("click", (e) => {
 	for (let r = 0; r < table.rows.length; r++) {
@@ -291,22 +341,23 @@ btnFinalize.addEventListener("click", (e) => {
 	}
 });
 
-fileInput.addEventListener("change", previewFile);
+fileInput.addEventListener("change", previewFile); //the Upload CSV button will call previewFile()
 
 function previewFile() {
 	const file = fileInput.files[0];
 	const reader = new FileReader();
 
 	reader.addEventListener("load", () => {
-		//csv_preview.innerText = reader.result;
-		csv_parse_from_string(reader.result);
+		//this will only fire once the file is done loading
+		csv_parse_from_string(reader.result); //reader.result will contain the entire csv contents, will be changed in the final product
 	});
 
 	if (file) {
-		reader.readAsText(file);
+		reader.readAsText(file); //reads the csv file, will fire the "load" event once finished
 	}
 }
 
+/* //leftover code from Flask, will eventually be worked back in
 function renderItem(msg) {
 	const wrap = document.createElement("div");
 	wrap.className = "item";
@@ -324,7 +375,7 @@ function renderItem(msg) {
 	wrap.appendChild(meta);
 	listEl.prepend(wrap);
 }
-
+ */
 function renderItem2(transaction) {
 	let wrap = document.createElement("div");
 	wrap.className = "item";
@@ -337,7 +388,7 @@ function renderItem2(transaction) {
 	wrap.appendChild(meta);
 	listEl.prepend(wrap);
 }
-
+/* //more flask stuff
 async function loadAll() {
 	return;
 	try {
@@ -348,8 +399,8 @@ async function loadAll() {
 		console.error("Failed to load messages", e);
 	}
 }
-
-// flask backend code, wip
+*/
+// flask backend code, wip and currently unused
 form.addEventListener("submit", async (ev) => {
 	ev.preventDefault();
 	const labelValue = labelInput.value.trim();
@@ -394,4 +445,4 @@ form.addEventListener("submit", async (ev) => {
 	}
 });
 
-loadAll();
+//loadAll();
