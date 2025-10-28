@@ -6,25 +6,55 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // --- Chart 1: Spending by Category ---
-  const categoryTotals = {};
-  expenses.forEach(e => {
-    categoryTotals[e.category] = (categoryTotals[e.category] || 0) + e.amount;
+  // --- Chart 1: Spending by Category (Today Only) ---
+
+  // checks if 2 dates are the same
+  function isSameLocalDay(a, b) {
+    return a.getFullYear() === b.getFullYear() &&
+          a.getMonth() === b.getMonth() &&
+          a.getDate() === b.getDate();
+  }
+  //current day
+  const today = new Date();
+
+  //changed date to corrent object formant
+  const todaysExpenses = (expenses || []).filter(e => {
+    const d = parseDateString(e.date);
+    return d && isSameLocalDay(d, today);
   });
 
-  new Chart(document.getElementById("categoryChart"), {
-    type: "pie",
-    data: {
-      labels: Object.keys(categoryTotals),
-      datasets: [{
-        data: Object.values(categoryTotals),
-        backgroundColor: [
-          "#66bb6a", "#42a5f5", "#ffca28", "#ef5350",
-          "#ab47bc", "#26c6da", "#8d6e63", "#9ccc65"
-        ]
-      }]
-    }
-  });
+  // creates cateegores for today's chart
+  const categoryTotals = {};
+  for (const e of todaysExpenses) {
+    categoryTotals[e.category] = (categoryTotals[e.category] || 0) + Number(e.amount || 0);
+  }
+
+  // no spending today
+  const catEl = document.getElementById("categoryChart");
+  const labels = Object.keys(categoryTotals);
+  const values = Object.values(categoryTotals);
+
+  //using chart js, this creates the pie chart
+  if (labels.length === 0) {
+    const empty = document.createElement("div");
+    empty.style.padding = "1rem";
+    empty.textContent = "No spending today.";
+    catEl.replaceWith(empty);
+  } else {
+    new Chart(catEl, {
+      type: "pie",
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: [
+            "#66bb6a", "#42a5f5", "#ffca28", "#ef5350",
+            "#ab47bc", "#26c6da", "#8d6e63", "#9ccc65"
+          ]
+        }]
+      }
+    });
+  }
 
   // --- Chart 2: Spending Over Time ---
   const timeTotals = {};
