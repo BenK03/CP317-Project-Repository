@@ -1,9 +1,13 @@
+// Runs after HTML loads
 document.addEventListener('DOMContentLoaded', () => {
+    // Find the Add Expense form
     const expenseForm = document.getElementById('expense-form');
 
     if (expenseForm) {
+        // Date input inside the form
         const dateInput = expenseForm.querySelector('#date');
 
+        // If user edits date, clear old error
         if (dateInput) {
             dateInput.addEventListener('input', () => dateInput.setCustomValidity(''));
         }
@@ -11,14 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
         expenseForm.addEventListener('submit', (event) => {
             event.preventDefault();
 
+            // Get the inputs
             const amountInput = expenseForm.querySelector('#amount');
             const categoryInput = expenseForm.querySelector('#category');
             const impulseInput = expenseForm.querySelector('#impulse');
 
+            // If anything is missing, do nothing
             if (!amountInput || !categoryInput || !impulseInput || !dateInput) {
                 return;
             }
 
+            // Read values from the form
             const amountValue = parseFloat(amountInput.value);
             const categoryValue = categoryInput.value;
             const impulseValue = impulseInput.value;
@@ -32,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Check it is a real calendar date
             const [day, month, year] = dateValue.split('/').map(Number);
             const parsedDate = new Date(year, month - 1, day);
             const isValidDate = parsedDate.getFullYear() === year &&
@@ -46,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             dateInput.setCustomValidity('');
 
+            // Make an expense object
             const expense = {
                 amount: Number.isNaN(amountValue) ? 0 : amountValue,
                 category: categoryValue,
@@ -53,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 date: dateValue
             };
 
+            // Get old expenses, add the new one, save all
             const expenses = readExpenses();
             expenses.push(expense);
             persistExpenses(expenses);
@@ -67,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Read expenses from your browser storage
 function readExpenses() {
     try {
         const storedExpenses = localStorage.getItem('expenses');
@@ -94,16 +105,19 @@ function readExpenses() {
     }
 }
 
+// Save all expenses back to your browser storage
 function persistExpenses(expenses) {
     localStorage.setItem('expenses', JSON.stringify(expenses));
 }
 
+// Show the expense list and the total
 function renderOverview(listElement) {
     const totalElement = document.getElementById('expense-total');
     const expenses = readExpenses();
 
     listElement.innerHTML = '';
 
+    // If nothing saved yet
     if (!expenses.length) {
         const emptyItem = document.createElement('li');
         emptyItem.textContent = 'No expenses recorded yet.';
@@ -118,6 +132,7 @@ function renderOverview(listElement) {
 
     let total = 0;
 
+    // Sort by date
     expenses.sort((a, b) => {
         const dateA = parseDateString(a.date);
         const dateB = parseDateString(b.date);
@@ -137,6 +152,7 @@ function renderOverview(listElement) {
         return dateB.getTime() - dateA.getTime();
     });
 
+    // Build list and add up the total
     expenses.forEach((expense) => {
         const amount = typeof expense.amount === 'number' ? expense.amount : parseFloat(expense.amount) || 0;
         total += amount;
@@ -147,11 +163,13 @@ function renderOverview(listElement) {
         listElement.appendChild(listItem);
     });
 
+    // Show total money
     if (totalElement) {
         totalElement.textContent = `Total: $${total.toFixed(2)}`;
     }
 }
 
+// Turn "DD/MM/YYYY" into a Date; return null if it is bad
 function parseDateString(value) {
     if (typeof value !== 'string') {
         return null;
