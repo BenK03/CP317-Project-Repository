@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head> 
-        <link rel="stylesheet" href="../style.css">
-    </head>
-    <body>
-
-        <nav class="nav-bar">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Categories</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="categories.css">
+</head>
+<body>
+    <nav class="nav-bar">
         <ul class="nav-links">
             <li><a href="../index.html">Home</a></li>
             <li><a href="../Overview/overview.html">Overview</a></li>
             <li><a href="categories.html">Categories</a></li>
             <li><a href="../Analytics/analytics.html">Analytics</a></li>
         </ul>
-        </nav>
+    </nav>
 
-    </body>
+    <main class="page-content categories-content">
+        <h1 class="categories-title">Expense Categories</h1>
+        <div id="category-chips" class="category-chips"></div>
+        <div id="category-sections" class="category-sections"></div>
+        <p id="categories-empty" class="categories-empty" hidden>No expenses recorded yet.</p>
+    </main>
+
+    <script src="../script.js"></script>
+    <script src="categories.js"></script>
+</body>
+</html>
