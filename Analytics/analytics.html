@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Analytics</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav class="nav-bar">
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../Overview/overview.html">Overview</a></li>
+      <li><a href="../Categories/categories.html">Categories</a></li>
+      <li><a href="analytics.html" class="active">Analytics</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+    <h1>Expense Analytics</h1>
+
+    <section class="chart-section">
+      <h2>Spending by Category</h2>
+      <canvas id="categoryChart"></canvas>
+    </section>
+
+    <section class="chart-section">
+      <h2>Spending Over Time</h2>
+      <canvas id="timeChart"></canvas>
+    </section>
+
+    <section class="chart-section">
+      <h2>Impulse vs Planned Purchases</h2>
+      <canvas id="impulseChart"></canvas>
+    </section>
+  </main>
+
+  <script src="../script.js"></script>
+  <script src="analytics.js"></script>
+</body>
+</html>

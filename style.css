@@ -1,0 +1,118 @@
+/*NAV BAR CENTER & HOVER UNDERLINE*/
+
+/*Make the <nav> take up center space*/
+.nav-bar {
+  flex: 1;      
+  text-align: center; 
+  z-index: 10;
+  min-width: 0;
+}
+
+/*Style the unordered list inside the nav*/
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  gap: 3rem;
+}
+
+/*Base link styling*/
+.nav-links a {
+  display: inline-block;
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  position: relative;
+  padding-bottom: 4px;
+  font-size: 1.2rem;
+}
+
+/*Underline effect using*/
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: green;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+/*END NAV BAR CENTER & HOVER UNDERLINE*/
+
+/*Expense Input Layout*/
+.page-content {
+  max-width: 480px;
+  margin: 4rem auto;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+}
+
+#title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #2d2d2d;
+}
+
+#expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.form-field input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.form-field input[type="number"]::-webkit-inner-spin-button,
+.form-field input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+#expense-form button {
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2b7a4b;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#expense-form button:hover {
+  background-color: #25673f;
+}
+
+/*End Expense Input Layout*/
