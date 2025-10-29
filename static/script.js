@@ -490,3 +490,11 @@ function previewFile() {
 		reader.readAsText(file); //reads the csv file, will fire the "load" event once finished
 	}
 }
+
+const addCategory = document.getElementById("addCategory");
+addCategory.addEventListener("keyup", function (event) {
+	if (event.key === "Enter") {
+		add_category(addCategory.value, 0x000);
+		addCategory.value = "";
+	}
+});
