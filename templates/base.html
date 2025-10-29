@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title or "Auth Demo" }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+      body { margin: 2rem; max-width: 720px; }
+      nav a { margin-right: .8rem; }
+      form { display: grid; gap: .6rem; max-width: 360px; margin-top: 1rem; }
+      input { padding: .6rem .7rem; }
+      button { padding: .6rem .8rem; cursor: pointer; }
+      .card { border: 1px solid #ddd; border-radius: 10px; padding: 1rem; background: #fafafa; }
+      .flash { padding: .6rem .8rem; border-radius: 8px; margin: .5rem 0; }
+      .ok { background: #e9f7ef; border: 1px solid #c7ebd7; }
+      .err { background: #fdecea; border: 1px solid #f5c6cb; }
+      code { background: #eee; padding: 0 .3rem; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a>
+      {% if session.get('user') %}
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </nav>
+
+    {% for c, m in get_flashed_messages(with_categories=True) %}
+      <div class="flash {{ 'ok' if c=='ok' else 'err' }}">{{ m }}</div>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
+  </body>
+</html>
