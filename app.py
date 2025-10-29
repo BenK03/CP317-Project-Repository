@@ -73,7 +73,7 @@ def login_required(fn):
 INDEX_TPL = """
 {% extends "base.html" %}
 {% block content %}
-  <h1>Filesystem-backed auth demo</h1>
+  <h1>Finance App Prototype</h1>
   {% if session.get('user') %}
     <p>You're logged in as <strong>{{ session['user'] }}</strong>.</p>
     <div class="card">

@@ -5,20 +5,110 @@
     <title>{{ title or "Auth Demo" }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-      body { margin: 2rem; max-width: 720px; }
-      nav a { margin-right: .8rem; }
-      form { display: grid; gap: .6rem; max-width: 360px; margin-top: 1rem; }
-      input { padding: .6rem .7rem; }
-      button { padding: .6rem .8rem; cursor: pointer; }
-      .card { border: 1px solid #ddd; border-radius: 10px; padding: 1rem; background: #fafafa; }
-      .flash { padding: .6rem .8rem; border-radius: 8px; margin: .5rem 0; }
-      .ok { background: #e9f7ef; border: 1px solid #c7ebd7; }
-      .err { background: #fdecea; border: 1px solid #f5c6cb; }
-      code { background: #eee; padding: 0 .3rem; border-radius: 4px; }
+      /*NAV BAR CENTER & HOVER UNDERLINE*/
+
+      /*Make the <nav> take up center space*/
+      .nav-bar {
+	flex: 1;
+	text-align: center;
+	z-index: 10;
+	min-width: 0;
+      }
+
+      /*Style the unordered list inside the nav*/
+      .nav-links {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: inline-flex;
+	gap: 3rem;
+      }
+
+      /*Base link styling*/
+      .nav-links a {
+	display: inline-block;
+	text-decoration: none;
+	color: black;
+	font-weight: 500;
+	position: relative;
+	padding-bottom: 4px;
+	font-size: 1.2rem;
+      }
+
+      /*Underline effect using*/
+      .nav-links a::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 2px;
+	width: 0;
+	background-color: green;
+	transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover::after {
+	width: 100%;
+      }
+      /*END NAV BAR CENTER & HOVER UNDERLINE*/
+
+      /*Expense Input Layout*/
+      .page-content {
+	max-width: 480px;
+	margin: 4rem auto;
+	padding: 2rem;
+	text-align: center;
+	border: 1px solid #e0e0e0;
+	border-radius: 12px;
+	background-color: #f9f9f9;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      }
+
+      #title {
+	margin-bottom: 2rem;
+	font-size: 2rem;
+	color: #2d2d2d;
+      }
+
+      #expense-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	text-align: left;
+      }
+
+      .form-field label {
+	display: block;
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+	color: #444;
+      }
+
+      .form-field input,
+      .form-field select {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: 1px solid #cfcfcf;
+	border-radius: 8px;
+	font-size: 1rem;
+	background-color: #fff;
+	box-sizing: border-box;
+      }
+
+      .form-field input[type="number"] {
+	appearance: textfield;
+	-moz-appearance: textfield;
+      }
+
+      .form-field input[type="number"]::-webkit-inner-spin-button,
+      .form-field input[type="number"]::-webkit-outer-spin-button {
+	appearance: none;
+	margin: 0;
+      }
     </style>
   </head>
   <body>
+  <main class="page-content">
     <nav>
       <a href="{{ url_for('index') }}">Home</a>
       {% if session.get('user') %}
@@ -28,6 +118,7 @@
         <a href="{{ url_for('register') }}">Register</a>
         <a href="{{ url_for('login') }}">Login</a>
       {% endif %}
+      <a href="./static/index.html">Finance</a>
     </nav>
 
     {% for c, m in get_flashed_messages(with_categories=True) %}
@@ -35,5 +126,6 @@
     {% endfor %}
 
     {% block content %}{% endblock %}
+  </main>
   </body>
 </html>
