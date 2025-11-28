@@ -204,41 +204,16 @@ function renderOverview(listElement) {
 		total += amount;
 
 		const listItem = document.createElement("li");
-
-		// Left side: stacked details
-		const leftDiv = document.createElement("div");
-		leftDiv.className = "expense-left";
-
-		const categorySpan = document.createElement("span");
-		categorySpan.textContent = `Category: ${expense.category || "None"}`;
-
-		const dateSpan = document.createElement("span");
-		dateSpan.textContent = `Date: ${expense.date || "N/A"}`;
-
-		const impulseSpan = document.createElement("span");
 		const impulseLabel =
 			expense.impulse === "yes" ? "Impulse: Yes" : "Impulse: No";
-		impulseSpan.textContent = impulseLabel;
-
-		leftDiv.appendChild(categorySpan);
-		leftDiv.appendChild(dateSpan);
-		leftDiv.appendChild(impulseSpan);
-
-		// Right side: amount
-		const rightDiv = document.createElement("div");
-		rightDiv.className = "expense-right";
-		rightDiv.textContent = `$${amount.toFixed(2)}`;
-
-		// Put left and right into the list item
-		listItem.appendChild(leftDiv);
-		listItem.appendChild(rightDiv);
-
+		listItem.textContent = `Amount: $${amount.toFixed(2)} | Category: ${expense.category} | ${impulseLabel} | ${expense.date}`;
 		listElement.appendChild(listItem);
+	});
 
-		if (totalElement) {
+	// Show total money
+	if (totalElement) {
 		totalElement.textContent = `Total: $${total.toFixed(2)}`;
 	}
-	});
 }
 
 // Turn "DD/MM/YYYY" into a Date; return null if it is bad
