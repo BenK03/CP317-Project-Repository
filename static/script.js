@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			// Get the inputs
 			const amountInput = expenseForm.querySelector("#amount");
+			const labelInput = expenseForm.querySelector("#label");
 			const categoryInput = expenseForm.querySelector("#category");
 			const impulseInput = expenseForm.querySelector("#impulse");
 
@@ -35,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			// Read values from the form
 			const amountValue = parseFloat(amountInput.value);
+			const labelValue = labelInput ? labelInput.value.trim() : "";
 			const categoryValue = categoryInput.value;
 			const impulseValue = impulseInput.value;
 			const dateValue = dateInput.value.trim();
@@ -70,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				amountValue,
 				dateValue,
 				impulseValue,
+				labelValue,
 			);
 
 			if (wasSaved) {
@@ -134,6 +137,7 @@ function readExpenses() {
 					typeof item.amount === "number"
 						? item.amount
 						: parseFloat(item.amount) || 0,
+				label: typeof item.label === "string" ? item.label : "",
 				category: typeof item.category === "string" ? item.category : "",
 				impulse: typeof item.impulse === "string" ? item.impulse : "",
 				date: typeof item.date === "string" ? item.date : "",
@@ -206,8 +210,14 @@ function renderOverview(listElement) {
 		const listItem = document.createElement("li");
 		const impulseLabel =
 			expense.impulse === "yes" ? "Impulse: Yes" : "Impulse: No";
-		listItem.textContent = `Amount: $${amount.toFixed(2)} | Category: ${expense.category} | ${impulseLabel} | ${expense.date}`;
+
+		// if label show, if not ignore
+        const expenseName = expense.label ? expense.label : expense.category.charAt(0).toUpperCase() + expense.category.slice(1);
+        
+        // display w label
+		listItem.textContent = `Amount: $${amount.toFixed(2)} | Label: ${expense.label} | Category: ${expense.category} | ${impulseLabel} | ${expense.date}`;
 		listElement.appendChild(listItem);
+        
 	});
 
 	// Show total money
@@ -354,6 +364,7 @@ async function add_transaction(
 	amountValue,
 	dateValue,
 	impulseValue,
+	labelValue = "",
 ) {
 	// let created = new transac_struct(category_id, amount, name, date);
 	// transac_list.push(created);
@@ -367,6 +378,7 @@ async function add_transaction(
 		category: categoryValue,
 		impulse: normalizeImpulseValue(impulseValue),
 		date: dateValue,
+		label: labelValue,
 	};
 
 	// If impulse, check monthly impulse purchases
