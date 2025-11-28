@@ -20,10 +20,23 @@ body {
     border-radius: 8px;
     padding: 1rem 1.25rem;
     background-color: #fff;
-    line-height: 2;
+    line-height: 1.5;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.expense-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.expense-right {
+    font-weight: 600;
     white-space: nowrap;
-    overflow-x: auto;
 }
 
 .expense-total {
