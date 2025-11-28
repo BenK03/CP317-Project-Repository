@@ -116,9 +116,24 @@
 }
 
 /*csv import table*/
+body {
+    font-family: 
+        -apple-system, 
+        BlinkMacSystemFont, 
+        "Segoe UI", 
+        Roboto, 
+        Oxygen-Sans, 
+        Ubuntu, 
+        Cantarell, 
+        "Helvetica Neue", 
+        sans-serif;
+    
+    background-color: #f7f7f7; 
+    color: #333;
+    line-height: 1.6; 
+}
 
 table {
-	font-family: arial, sans-serif;
 	border-collapse: collapse;
 }
 
