@@ -159,3 +159,81 @@ td:hover {
 }
 
 /*End Expense Input Layout*/
+
+/*Impulse confirmation modal*/
+.modal {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.5rem;
+	background: rgba(0, 0, 0, 0.4);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s ease, visibility 0.2s ease;
+	z-index: 1000;
+}
+
+.modal.open {
+	opacity: 1;
+	visibility: visible;
+}
+
+.modal-content {
+	width: min(480px, 100%);
+	background: #ffffff;
+	border-radius: 12px;
+	padding: 1.5rem;
+	box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
+}
+
+.modal-content h2 {
+	margin: 0 0 0.75rem 0;
+	font-size: 1.4rem;
+	color: #2d2d2d;
+}
+
+.modal-content p {
+	margin: 0;
+	color: #444;
+	line-height: 1.4;
+}
+
+.modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+}
+
+.modal-btn {
+	padding: 0.75rem 1.1rem;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	border: 1px solid transparent;
+	transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.modal-btn.primary {
+	background-color: #2b7a4b;
+	border-color: #2b7a4b;
+	color: #ffffff;
+	box-shadow: 0 8px 16px rgba(43, 122, 75, 0.25);
+}
+
+.modal-btn.primary:hover {
+	background-color: #25673f;
+}
+
+.modal-btn.secondary {
+	background-color: #ffffff;
+	border-color: #2b7a4b;
+	color: #2b7a4b;
+}
+
+.modal-btn.secondary:hover {
+	background-color: #f2f8f4;
+}

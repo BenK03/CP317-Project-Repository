@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			resetExpenses();
 		});
 
-		expenseForm.addEventListener("submit", (event) => {
+		expenseForm.addEventListener("submit", async (event) => {
 			event.preventDefault();
 
 			// Get the inputs
@@ -65,9 +65,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			dateInput.setCustomValidity("");
 
-			add_transaction(categoryValue, amountValue, dateValue, impulseValue);
+			const wasSaved = await add_transaction(
+				categoryValue,
+				amountValue,
+				dateValue,
+				impulseValue,
+			);
 
-			expenseForm.reset();
+			if (wasSaved) {
+				expenseForm.reset();
+			}
 		});
 	}
 
@@ -242,6 +249,97 @@ function parseDateString(value) {
 	return date;
 }
 
+function normalizeImpulseValue(rawImpulse) {
+	if (typeof rawImpulse === "string") {
+		return rawImpulse.toLowerCase();
+	}
+
+	if (rawImpulse === true) {
+		return "yes";
+	}
+
+	if (rawImpulse === false) {
+		return "no";
+	}
+
+	return "";
+}
+
+function getMonthlyImpulseStats(targetDate) {
+	if (!(targetDate instanceof Date) || Number.isNaN(targetDate)) {
+		return { count: 0, total: 0 };
+	}
+
+	const expenses = readExpenses();
+	const month = targetDate.getMonth();
+	const year = targetDate.getFullYear();
+	let count = 0;
+	let total = 0;
+
+	expenses.forEach((expense) => {
+		const expenseDate = parseDateString(expense.date);
+		const isImpulse =
+			typeof expense.impulse === "string" &&
+			expense.impulse.toLowerCase() === "yes";
+
+		if (
+			isImpulse &&
+			expenseDate &&
+			expenseDate.getMonth() === month &&
+			expenseDate.getFullYear() === year
+		) {
+			const amount =
+				typeof expense.amount === "number"
+					? expense.amount
+					: parseFloat(expense.amount) || 0;
+			total += amount;
+			count += 1;
+		}
+	});
+
+	return { count, total };
+}
+
+function createImpulseConfirmation() {
+	const modal = document.getElementById("impulse-modal");
+	const messageEl = document.getElementById("impulse-modal-message");
+	const confirmBtn = document.getElementById("impulse-confirm");
+	const cancelBtn = document.getElementById("impulse-cancel");
+
+	if (!modal || !messageEl || !confirmBtn || !cancelBtn) {
+		return async (message) => window.confirm(message);
+	}
+
+	let resolveChoice = null;
+
+	const close = () => {
+		modal.classList.remove("open");
+		modal.setAttribute("aria-hidden", "true");
+	};
+
+	const handleChoice = (choice) => {
+		if (resolveChoice) {
+			resolveChoice(choice);
+			resolveChoice = null;
+		}
+		close();
+	};
+
+	confirmBtn.addEventListener("click", () => handleChoice(true));
+	cancelBtn.addEventListener("click", () => handleChoice(false));
+
+	return (message) => {
+		messageEl.textContent = message;
+		modal.classList.add("open");
+		modal.setAttribute("aria-hidden", "false");
+		return new Promise((resolve) => {
+			resolveChoice = resolve;
+		});
+	};
+}
+
+const requestImpulseConfirmation = createImpulseConfirmation();
+
 /*
 
 
@@ -251,7 +349,12 @@ function parseDateString(value) {
 */
 
 //add a new transaction to the transac_list and update all analytics
-function add_transaction(categoryValue, amountValue, dateValue, impulseValue) {
+async function add_transaction(
+	categoryValue,
+	amountValue,
+	dateValue,
+	impulseValue,
+) {
 	// let created = new transac_struct(category_id, amount, name, date);
 	// transac_list.push(created);
 	// update_category(category_id);
@@ -262,14 +365,35 @@ function add_transaction(categoryValue, amountValue, dateValue, impulseValue) {
 	const expense = {
 		amount: Number.isNaN(amountValue) ? 0 : amountValue,
 		category: categoryValue,
-		impulse: impulseValue,
+		impulse: normalizeImpulseValue(impulseValue),
 		date: dateValue,
 	};
+
+	// If impulse, check monthly impulse purchases
+	if (expense.impulse === "yes") {
+		const purchaseDate = parseDateString(expense.date);
+		const { count, total } = getMonthlyImpulseStats(purchaseDate);
+		// if count >= 4 then pop the window up
+		if (count >= 4) {
+			const pendingCount = count + 1;
+			const pendingTotal = total + expense.amount;
+			const message = `You have spent $${pendingTotal.toFixed(
+				2,
+			)} on impulse purchases this month and have made ${pendingCount} impulse purchases.\nAre you sure you want to continue?`;
+			const shouldLog = await requestImpulseConfirmation(message);
+
+			if (!shouldLog) {
+				return false;
+			}
+		}
+	}
 
 	// Get old expenses, add the new one, save all
 	const expenses = readExpenses();
 	expenses.push(expense);
 	persistExpenses(expenses);
+
+	return true;
 }
 
 const fileInput = document.getElementById("upload"); //upload csv button
@@ -431,7 +555,7 @@ btnDate.addEventListener("click", (e) => {
 	for the respective html classes, then finally create the transaction for that row before moving onto the next
 */
 const btnFinalize = document.getElementById("btnFinalize");
-btnFinalize.addEventListener("click", (e) => {
+btnFinalize.addEventListener("click", async (e) => {
 	for (let r = 0; r < table.rows.length; r++) {
 		const row = table.rows[r];
 		let cat_name = "None";
@@ -459,7 +583,7 @@ btnFinalize.addEventListener("click", (e) => {
 			let parse_date = new Date(
 				add_date.replace(" ", "T").replace(/(\.\d{3})\d+$/, "$1") + "Z",
 			);
-			add_transaction(
+			await add_transaction(
 				cat_name,
 				add_amount,
 				parse_date.getDate() +
@@ -470,7 +594,7 @@ btnFinalize.addEventListener("click", (e) => {
 				false,
 			);
 		} else {
-			add_transaction(cat_name, add_amount, add_date, false);
+			await add_transaction(cat_name, add_amount, add_date, false);
 		}
 	}
 });
