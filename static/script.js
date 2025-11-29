@@ -208,16 +208,42 @@ function renderOverview(listElement) {
 		total += amount;
 
 		const listItem = document.createElement("li");
-		const impulseLabel =
-			expense.impulse === "yes" ? "Impulse: Yes" : "Impulse: No";
+		
+		// left side
+		const leftDiv = document.createElement("div");
+		leftDiv.className = "expense-left";
 
-		// if label show, if not ignore
-        const expenseName = expense.label ? expense.label : expense.category.charAt(0).toUpperCase() + expense.category.slice(1);
-        
-        // display w label
-		listItem.textContent = `Amount: $${amount.toFixed(2)} | Label: ${expense.label} | Category: ${expense.category} | ${impulseLabel} | ${expense.date}`;
+		const catSpan = document.createElement("div");
+		catSpan.className = "expense-category";
+		catSpan.textContent = expense.category;
+
+		const impulseSpan = document.createElement("div");
+		impulseSpan.className = "expense-subtext";
+		
+		const isImpulse = expense.impulse === "yes" ? "Impulse" : "Planned"; 
+		impulseSpan.textContent = `${isImpulse} • ${expense.date}`;
+
+		leftDiv.appendChild(catSpan);
+		leftDiv.appendChild(impulseSpan);
+
+		// middle
+		const middleDiv = document.createElement("div");
+		middleDiv.className = "expense-middle";
+		// show if label exsists
+		if (expense.label) {
+			middleDiv.textContent = expense.label;
+		}
+
+		// right
+		const rightDiv = document.createElement("div");
+		rightDiv.className = "expense-right";
+		rightDiv.textContent = `$${amount.toFixed(2)}`;
+
+		listItem.appendChild(leftDiv);
+		listItem.appendChild(middleDiv);
+		listItem.appendChild(rightDiv);
+
 		listElement.appendChild(listItem);
-        
 	});
 
 	// Show total money
