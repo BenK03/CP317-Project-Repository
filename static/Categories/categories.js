@@ -129,11 +129,13 @@
 		const date = typeof expense?.date === "string" ? expense.date : "";
 		const impulse =
 			typeof expense?.impulse === "string" ? expense.impulse.toLowerCase() : "";
+		const label = typeof expense?.label === "string" ? expense.label : "";
 
 		return {
 			amount,
 			categoryId,
 			date,
+			label,
 			displayDate: formatDisplayDate(date),
 			isImpulse: impulse === "yes",
 		};
@@ -320,6 +322,14 @@
 
 		const meta = document.createElement("div");
 		meta.className = "category-expense-meta";
+
+		if (expense.label) {
+			const labelDiv = document.createElement("div");
+			labelDiv.className = "category-expense-label";
+			labelDiv.textContent = expense.label;
+			labelDiv.style.fontWeight = "bold";
+			meta.appendChild(labelDiv);
+		}
 
 		const date = document.createElement("span");
 		date.textContent = expense.displayDate;
