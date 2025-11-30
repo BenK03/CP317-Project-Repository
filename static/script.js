@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const overviewList = document.getElementById("expense-list");
 	if (overviewList) {
 		renderOverview(overviewList);
+		console.log("ayy");
 	}
 });
 
@@ -92,6 +93,9 @@ var categories_list = [];
 
 function update_categories() {
 	const cat_select = document.getElementById("category");
+	//	if (cat_select == null) {
+	//		return;
+	//	}
 	cat_select.innerHTML = "";
 	for (let i = 0; i < categories_list.length; i++) {
 		const cat_option = document.createElement("option"); //update category dropdown
@@ -117,40 +121,54 @@ function add_category(name, color) {
 add_category("None", 0x000);
 
 // Read expenses from your browser storage
-function readExpenses() {
-	try {
-		const storedExpenses = localStorage.getItem("expenses");
-		if (!storedExpenses) {
-			return [];
-		}
+async function readExpenses() {
+	let storedExpenses = [];
 
-		const parsedExpenses = JSON.parse(storedExpenses);
+	const request = await fetch("/load_transcript");
+	const result = await request.json();
 
-		if (!Array.isArray(parsedExpenses)) {
-			return [];
-		}
+	storedExpenses = result.data;
+	console.log("Loaded json:", storedExpenses);
 
-		return parsedExpenses
-			.filter((item) => typeof item === "object" && item !== null)
-			.map((item) => ({
-				amount:
-					typeof item.amount === "number"
-						? item.amount
-						: parseFloat(item.amount) || 0,
-				label: typeof item.label === "string" ? item.label : "",
-				category: typeof item.category === "string" ? item.category : "",
-				impulse: typeof item.impulse === "string" ? item.impulse : "",
-				date: typeof item.date === "string" ? item.date : "",
-			}));
-	} catch (error) {
-		console.error("Unable to read expenses from local storage", error);
+	if (!storedExpenses) {
+		console.log("nice");
 		return [];
 	}
+
+	//const parsedExpenses = JSON.parse(storedExpenses);
+	if (!Array.isArray(storedExpenses)) {
+		return [];
+	}
+
+	return storedExpenses
+		.filter((item) => typeof item === "object" && item !== null)
+		.map((item) => ({
+			amount:
+				typeof item.amount === "number"
+					? item.amount
+					: parseFloat(item.amount) || 0,
+			label: typeof item.label === "string" ? item.label : "",
+			category: typeof item.category === "string" ? item.category : "",
+			impulse: typeof item.impulse === "string" ? item.impulse : "",
+			date: typeof item.date === "string" ? item.date : "",
+		}));
 }
 
 // Save all expenses back to your browser storage
 function persistExpenses(expenses) {
 	localStorage.setItem("expenses", JSON.stringify(expenses));
+	fetch("/save_transcript", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ data: expenses }),
+	})
+		.then((response) => response.json())
+		.then((result) => {
+			console.log("Saved!", result);
+		})
+		.catch((err) => console.error(err));
 }
 
 function resetExpenses() {
@@ -158,10 +176,11 @@ function resetExpenses() {
 }
 
 // Show the expense list and the total
-function renderOverview(listElement) {
+async function renderOverview(listElement) {
 	const totalElement = document.getElementById("expense-total");
-	const expenses = readExpenses();
-
+	const expenses = await readExpenses();
+	console.log("test");
+	console.log(expenses);
 	listElement.innerHTML = "";
 
 	// If nothing saved yet
@@ -208,7 +227,7 @@ function renderOverview(listElement) {
 		total += amount;
 
 		const listItem = document.createElement("li");
-		
+
 		// left side
 		const leftDiv = document.createElement("div");
 		leftDiv.className = "expense-left";
@@ -219,8 +238,8 @@ function renderOverview(listElement) {
 
 		const impulseSpan = document.createElement("div");
 		impulseSpan.className = "expense-subtext";
-		
-		const isImpulse = expense.impulse === "yes" ? "Impulse" : "Planned"; 
+
+		const isImpulse = expense.impulse === "yes" ? "Impulse" : "Planned";
 		impulseSpan.textContent = `${isImpulse} • ${expense.date}`;
 
 		leftDiv.appendChild(catSpan);

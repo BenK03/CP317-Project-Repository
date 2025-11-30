@@ -1,21 +1,22 @@
 import json
 import os
-from datetime import datetime, timezone
-from pathlib import Path
 import re
+from datetime import datetime, timezone
+from functools import wraps
+from pathlib import Path
 
 from flask import (
     Flask,
-    request,
-    render_template_string,
-    redirect,
-    url_for,
-    session,
     abort,
     flash,
+    jsonify,
+    redirect,
+    render_template_string,
+    request,
+    session,
+    url_for,
 )
-from werkzeug.security import generate_password_hash, check_password_hash
-from functools import wraps
+from werkzeug.security import check_password_hash, generate_password_hash
 
 # ------------------ Config ------------------
 APP_SECRET = os.environ.get("FLASK_SECRET", "dev-only-change-me")
@@ -31,7 +32,9 @@ app.secret_key = APP_SECRET
 # ------------------ Helpers ------------------
 def account_path(username: str) -> Path:
     # store as "<username>.json" in ACCOUNTS_DIR
-    return ACCOUNTS_DIR / f"{username}.json"
+    # return ACCOUNTS_DIR / f"{username}.json"
+    os.makedirs(ACCOUNTS_DIR / f"{username}", exist_ok=True)
+    return ACCOUNTS_DIR / f"{username}" / "user.json"
 
 
 def load_account(username: str):
@@ -52,6 +55,12 @@ def save_account_atomic(username: str, data: dict) -> None:
         os.fsync(f.fileno())
     os.replace(tmp, p)
     os.chmod(p, 0o600)
+
+
+def write_transcript(username: str, data) -> None:
+    os.makedirs(ACCOUNTS_DIR / f"{username}", exist_ok=True)
+    with open(ACCOUNTS_DIR / f"{username}" / "data.json", "w") as f:
+        json.dump(data, f, indent=4)
 
 
 def username_is_valid(username: str) -> bool:
@@ -222,6 +231,35 @@ def profile():
         user=user,
         path=str(account_path(user["username"]).resolve()),
     )
+
+
+@app.route("/save_transcript", methods=["POST"])
+@login_required
+def save_transcript():
+    data = request.get_json()
+    if not data or "data" not in data:
+        return jsonify({"error": "Missing array"}), 400
+    transcript = data["data"]
+    cur_user = load_account(session["user"])
+    if cur_user is None:
+        return jsonify({"error": "User account not found"}), 404
+    write_transcript(cur_user["username"], transcript)
+    return jsonify({"status": "success", "saved_items": len(transcript)})
+
+
+@app.route("/load_transcript", methods=["GET"])
+@login_required
+def load_transcript():
+    cur_user = load_account(session["user"])
+    if cur_user is None:
+        return jsonify({"error": "User account not found"}), 404
+    u_name = cur_user["username"]
+    try:
+        with open(ACCOUNTS_DIR / f"{u_name}" / "data.json", "r") as f:
+            transcript = json.load(f)
+    except FileNotFoundError:
+        return jsonify({"error": "No saved data yet"}), 404
+    return jsonify({"data": transcript})
 
 
 if __name__ == "__main__":

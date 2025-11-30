@@ -1,0 +1,5 @@
+{
+  "username": "test",
+  "password_hash": "scrypt:32768:8:1$LZLMRL5eAt703OIF$997f3926f971a673ea1820027d684afcd7fcd81d42715eacd11690c64cbe58a59a2357c203af4f7e058327afa7289938aae6adb65918d34e86f27fd093659070",
+  "created": "2025-11-29T23:11:59.904389+00:00"
+}
