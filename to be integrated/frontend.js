@@ -10,6 +10,18 @@ const categoryInput = document.getElementById("category-select");
 //global array of strings for category names
 var categories = [];
 
+const CHART_COLORS =[
+	"rgba(79, 70, 229, 0.85)",
+	"rgba(16, 185, 129, 0.85)",
+	"rgba(245,158, 11, 0.85)",
+	"rgba(239, 68, 68, 0.85)",
+	"rgba(59, 130, 246, 0.85)",
+	"rgba(236, 72, 153, 0.85)",
+	"rgba(14, 165, 233, 0.85)",
+	"rgba(132, 204, 22, 0.85)",
+
+];
+
 //add category and update the category dropdown option
 function add_category(name) {
 	if (categories.includes(name)) return -1;
@@ -39,15 +51,23 @@ function analytic_struct(total_amount, num_of_transactions) {
 	//add more probably
 }
 
-//updating the charts requires destroying and recreating them, therefore the chart object needs to be passed into the function
-// chart_obj - the chart returned by this function
-// canvas - canvas html element that will hold the graph
-// type - string, type of graph
-// labels - data labels
-// dataset - the actual data
-// title - will be displayed at the top of the graph
 function update_chart(chart_obj, canvas, type, labels, dataset, title) {
+	// Destroy previous instance so Chart.js can recreate cleanly
 	if (chart_obj) chart_obj.destroy();
+
+	// Build color arrays based on number of data points
+	const backgroundColors = dataset.map(
+		(_, i) => CHART_COLORS[i % CHART_COLORS.length],
+	);
+	const borderColors = dataset.map((_, i) => {
+		// same hues but fully opaque borders
+		const c = CHART_COLORS[i % CHART_COLORS.length];
+		// naive replace alpha '0.85' -> '1' for border
+		return c.replace("0.85", "1");
+	});
+
+	const isCountChart = title.toLowerCase().includes("number of transactions");
+
 	chart_obj = new Chart(canvas, {
 		type: type,
 		data: {
@@ -55,19 +75,83 @@ function update_chart(chart_obj, canvas, type, labels, dataset, title) {
 			datasets: [
 				{
 					data: dataset,
+					backgroundColor: backgroundColors,
+					borderColor: borderColors,
+					borderWidth: 1.5,
+					hoverOffset: 8, // pops out on hover
 				},
 			],
 		},
 		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			layout: {
+				padding: 16,
+			},
 			plugins: {
 				title: {
 					display: true,
 					text: title,
-					font: { size: 16 },
+					font: {
+						size: 18,
+						weight: "600",
+					},
+					color: "#111827",
+					padding: {
+						top: 8,
+						bottom: 12,
+					},
 				},
+				legend: {
+					display: true,
+					position: "bottom",
+					labels: {
+						usePointStyle: true,
+						pointStyle: "circle",
+						padding: 16,
+						font: {
+							size: 12,
+						},
+					},
+				},
+				tooltip: {
+					enabled: true,
+					usePointStyle: true,
+					padding: 10,
+					backgroundColor: "rgba(17, 24, 39, 0.9)",
+					titleFont: {
+						weight: "600",
+					},
+					callbacks: {
+						label: (context) => {
+							const label = context.label || "";
+							const value = context.parsed;
+
+							if (isCountChart) {
+								return `${label}: ${value} transaction${
+									value === 1 ? "" : "s"
+								}`;
+							}
+
+							if (typeof value === "number" && !Number.isNaN(value)) {
+								const formatted = value.toLocaleString(undefined, {
+									minimumFractionDigits: 2,
+									maximumFractionDigits: 2,
+								});
+								return `${label}: $${formatted}`;
+							}
+							return `${label}: ${value}`;
+						},
+					},
+				},
+			},
+			animation: {
+				duration: 900,
+				easing: "easeOutQuart",
 			},
 		},
 	});
+
 	return chart_obj;
 }
 
