@@ -1,0 +1,5 @@
+{
+  "username": "test2",
+  "password_hash": "scrypt:32768:8:1$s6vXpaPkVJCHBxKu$388116bb3cb1602b89b519e194977887bcdd5202fafad1744af55bbf162e3704f873cae2f386b071975e1a5b692436328b2b56978dc28d32dc2f416e31814643",
+  "created": "2025-12-01T10:50:50.513975+00:00"
+}

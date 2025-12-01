@@ -1,5 +1,5 @@
 // category list shown on the page
-(function () {
+(async function () {
 	const CATEGORY_PRESETS = [];
 
 	// Impulse buys
@@ -14,7 +14,7 @@
 	];
 
 	// Run after page loads
-	document.addEventListener("DOMContentLoaded", () => {
+	document.addEventListener("DOMContentLoaded", async () => {
 		const chipsContainer = document.getElementById("category-chips");
 		const sectionsContainer = document.getElementById("category-sections");
 		const emptyMessage = document.getElementById("categories-empty");
@@ -25,7 +25,7 @@
 		}
 
 		// Get saved expenses and turn them into category data
-		const expenses = fetchExpenses();
+		const expenses = await fetchExpenses();
 		const categories = buildCategoryData(expenses);
 		const hasAnyExpense = expenses.length > 0;
 
@@ -38,9 +38,9 @@
 	});
 
 	// Read expenses from readExpenses() if available if not read from localStorage
-	function fetchExpenses() {
+	async function fetchExpenses() {
 		if (typeof readExpenses === "function") {
-			return readExpenses();
+			return await readExpenses();
 		}
 
 		// Plan B: read directly from localStorage

@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
-	const expenses = readExpenses();
+document.addEventListener("DOMContentLoaded", async () => {
+	const expenses = await readExpenses();
 
 	if (!expenses.length) {
 		alert("No expense data found. Please add some expenses first.");
@@ -265,65 +265,61 @@ document.addEventListener("DOMContentLoaded", () => {
 		},
 	});
 	// chart 6 total number of expenses per category
-    const budgetCanvas = document.getElementById("budget-donut-chart");
-    if (budgetCanvas) {
-        // read stored budget
-        const storedBudget = parseFloat(
-            localStorage.getItem("monthlyBudget") || "0",
-        );
+	const budgetCanvas = document.getElementById("budget-donut-chart");
+	if (budgetCanvas) {
+		// read stored budget
+		const storedBudget = parseFloat(
+			localStorage.getItem("monthlyBudget") || "0",
+		);
 
-        // if there is no budget yet, use 1 so the donut still draws
-        const budgetValue =
-            !isNaN(storedBudget) && storedBudget > 0 ? storedBudget : 1;
+		// if there is no budget yet, use 1 so the donut still draws
+		const budgetValue =
+			!isNaN(storedBudget) && storedBudget > 0 ? storedBudget : 1;
 
-        //check if an expense is in the current month
-        function isInCurrentMonth(dateStr) {
-            const d = parseDateString(dateStr);
-            if (!d) return false;
-            const now = new Date();
-            return (
-                d.getFullYear() === now.getFullYear() &&
-                d.getMonth() === now.getMonth()
-            );
-        }
+		//check if an expense is in the current month
+		function isInCurrentMonth(dateStr) {
+			const d = parseDateString(dateStr);
+			if (!d) return false;
+			const now = new Date();
+			return (
+				d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()
+			);
+		}
 
-        // filter expenses for this month and add them up
-        const thisMonthExpenses = expenses.filter((e) =>
-            isInCurrentMonth(e.date),
-        );
-        const monthTotal = thisMonthExpenses.reduce(
-            (sum, e) => sum + Number(e.amount || 0),
-            0,
-        );
+		// filter expenses for this month and add them up
+		const thisMonthExpenses = expenses.filter((e) => isInCurrentMonth(e.date));
+		const monthTotal = thisMonthExpenses.reduce(
+			(sum, e) => sum + Number(e.amount || 0),
+			0,
+		);
 
-        const budget = !isNaN(storedBudget) && storedBudget > 0 ? storedBudget : 0;
-        const remaining = Math.max(budget - monthTotal, 0);
+		const budget = !isNaN(storedBudget) && storedBudget > 0 ? storedBudget : 0;
+		const remaining = Math.max(budget - monthTotal, 0);
 
-
-        new Chart(budgetCanvas, {
-            type: "doughnut",
-            data: {
-                    labels: ["Remaining Budget", "Total Expenses"],
-                datasets: [
-                    {
-                        // blue for remaining, red for monthly expenses
-                        data: [remaining, monthTotal],
-                        backgroundColor: ["#3b82f6", "#ef4444"],
-                        hoverBackgroundColor: ["#2563eb", "#b91c1c"],
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: "bottom" },
-                    title: {
-                        display: true,
-                        text: "Budget view",
-                    },
-                },
-            },
-        });
-        } 
+		new Chart(budgetCanvas, {
+			type: "doughnut",
+			data: {
+				labels: ["Remaining Budget", "Total Expenses"],
+				datasets: [
+					{
+						// blue for remaining, red for monthly expenses
+						data: [remaining, monthTotal],
+						backgroundColor: ["#3b82f6", "#ef4444"],
+						hoverBackgroundColor: ["#2563eb", "#b91c1c"],
+						borderWidth: 1,
+					},
+				],
+			},
+			options: {
+				responsive: true,
+				plugins: {
+					legend: { position: "bottom" },
+					title: {
+						display: true,
+						text: "Budget view",
+					},
+				},
+			},
+		});
+	}
 });

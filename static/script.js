@@ -113,44 +113,72 @@ function add_category(name, color) {
 	categories_list.push(category_obj);
 	update_categories();
 }
+var global_expenses;
+
+async function runInit() {
+	if (!global_expenses) {
+		global_expenses = await readExpenses();
+	}
+	console.log("Global Expenses");
+	console.log(global_expenses);
+	for (let i = 0; i < global_expenses.length; i++) {
+		add_category(global_expenses[i].category, 0x000);
+	}
+}
 
 add_category("None", 0x000);
+runInit();
 
 // Read expenses from your browser storage
-function readExpenses() {
-	try {
-		const storedExpenses = localStorage.getItem("expenses");
-		if (!storedExpenses) {
-			return [];
-		}
+async function readExpenses() {
+	let storedExpenses = [];
 
-		const parsedExpenses = JSON.parse(storedExpenses);
+	const request = await fetch("/load_transcript");
 
-		if (!Array.isArray(parsedExpenses)) {
-			return [];
-		}
+	const result = await request.json();
 
-		return parsedExpenses
-			.filter((item) => typeof item === "object" && item !== null)
-			.map((item) => ({
-				amount:
-					typeof item.amount === "number"
-						? item.amount
-						: parseFloat(item.amount) || 0,
-				label: typeof item.label === "string" ? item.label : "",
-				category: typeof item.category === "string" ? item.category : "",
-				impulse: typeof item.impulse === "string" ? item.impulse : "",
-				date: typeof item.date === "string" ? item.date : "",
-			}));
-	} catch (error) {
-		console.error("Unable to read expenses from local storage", error);
+	storedExpenses = result.data;
+	console.log("Loaded json:", storedExpenses);
+
+	if (!storedExpenses) {
+		console.log("nice");
 		return [];
 	}
+
+	//const parsedExpenses = JSON.parse(storedExpenses);
+	if (!Array.isArray(storedExpenses)) {
+		return [];
+	}
+
+	return storedExpenses
+		.filter((item) => typeof item === "object" && item !== null)
+		.map((item) => ({
+			amount:
+				typeof item.amount === "number"
+					? item.amount
+					: parseFloat(item.amount) || 0,
+			label: typeof item.label === "string" ? item.label : "",
+			category: typeof item.category === "string" ? item.category : "",
+			impulse: typeof item.impulse === "string" ? item.impulse : "",
+			date: typeof item.date === "string" ? item.date : "",
+		}));
 }
 
 // Save all expenses back to your browser storage
 function persistExpenses(expenses) {
 	localStorage.setItem("expenses", JSON.stringify(expenses));
+	fetch("/save_transcript", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ data: expenses }),
+	})
+		.then((response) => response.json())
+		.then((result) => {
+			console.log("Saved!", result);
+		})
+		.catch((err) => console.error(err));
 }
 
 function resetExpenses() {
@@ -158,9 +186,9 @@ function resetExpenses() {
 }
 
 // Show the expense list and the total
-function renderOverview(listElement) {
+async function renderOverview(listElement) {
 	const totalElement = document.getElementById("expense-total");
-	const expenses = readExpenses();
+	const expenses = await readExpenses();
 
 	listElement.innerHTML = "";
 
@@ -208,7 +236,7 @@ function renderOverview(listElement) {
 		total += amount;
 
 		const listItem = document.createElement("li");
-		
+
 		// left side
 		const leftDiv = document.createElement("div");
 		leftDiv.className = "expense-left";
@@ -219,8 +247,8 @@ function renderOverview(listElement) {
 
 		const impulseSpan = document.createElement("div");
 		impulseSpan.className = "expense-subtext";
-		
-		const isImpulse = expense.impulse === "yes" ? "Impulse" : "Planned"; 
+
+		const isImpulse = expense.impulse === "yes" ? "Impulse" : "Planned";
 		impulseSpan.textContent = `${isImpulse} • ${expense.date}`;
 
 		leftDiv.appendChild(catSpan);
@@ -301,12 +329,12 @@ function normalizeImpulseValue(rawImpulse) {
 	return "";
 }
 
-function getMonthlyImpulseStats(targetDate) {
+async function getMonthlyImpulseStats(targetDate) {
 	if (!(targetDate instanceof Date) || Number.isNaN(targetDate)) {
 		return { count: 0, total: 0 };
 	}
 
-	const expenses = readExpenses();
+	const expenses = await readExpenses();
 	const month = targetDate.getMonth();
 	const year = targetDate.getFullYear();
 	let count = 0;
@@ -410,7 +438,7 @@ async function add_transaction(
 	// If impulse, check monthly impulse purchases
 	if (expense.impulse === "yes") {
 		const purchaseDate = parseDateString(expense.date);
-		const { count, total } = getMonthlyImpulseStats(purchaseDate);
+		const { count, total } = await getMonthlyImpulseStats(purchaseDate);
 		// if count >= 4 then pop the window up
 		if (count >= 4) {
 			const pendingCount = count + 1;
@@ -427,7 +455,10 @@ async function add_transaction(
 	}
 
 	// Get old expenses, add the new one, save all
-	const expenses = readExpenses();
+	if (!global_expenses) {
+		global_expenses = await readExpenses();
+	}
+	const expenses = global_expenses;
 	expenses.push(expense);
 	persistExpenses(expenses);
 
@@ -662,18 +693,18 @@ addCategory.addEventListener("keyup", function (event) {
 });
 // monthly budget input handling
 document.addEventListener("DOMContentLoaded", () => {
-    const budgetInput = document.getElementById("monthly-budget");
-    if (!budgetInput) return;
+	const budgetInput = document.getElementById("monthly-budget");
+	if (!budgetInput) return;
 
-    const storedBudget = parseFloat(localStorage.getItem("monthlyBudget") || "0");
-    if (!isNaN(storedBudget) && storedBudget > 0) {
-        budgetInput.value = storedBudget;
-    }
+	const storedBudget = parseFloat(localStorage.getItem("monthlyBudget") || "0");
+	if (!isNaN(storedBudget) && storedBudget > 0) {
+		budgetInput.value = storedBudget;
+	}
 
-    budgetInput.addEventListener("change", () => {
-        const value = parseFloat(budgetInput.value);
-        if (!isNaN(value) && value >= 0) {
-            localStorage.setItem("monthlyBudget", String(value));
-        }
-    });
+	budgetInput.addEventListener("change", () => {
+		const value = parseFloat(budgetInput.value);
+		if (!isNaN(value) && value >= 0) {
+			localStorage.setItem("monthlyBudget", String(value));
+		}
+	});
 });

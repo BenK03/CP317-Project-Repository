@@ -1,170 +1,173 @@
 .categories-content {
-    max-width: 960px;
-    margin: 3rem auto;
-    padding: 2.5rem;
-    background-color: #f8fafb;
-    border-radius: 16px;
-    box-shadow: 0 18px 45px rgba(31, 41, 55, 0.08);
+	max-width: 960px;
+	margin: 3rem auto;
+	padding: 2.5rem;
+	background-color: #f8fafb;
+	border-radius: 16px;
+	box-shadow: 0 18px 45px rgba(31, 41, 55, 0.08);
 }
 
 .categories-title {
-    text-align: center;
-    margin-bottom: 1.75rem;
-    font-size: 2.25rem;
-    color: #1f2937;
+	text-align: center;
+	margin-bottom: 1.75rem;
+	font-size: 2.25rem;
+	color: #1f2937;
 }
 
 .category-chips {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding: 0.5rem 0 0.75rem;
-    scrollbar-width: thin;
+	display: flex;
+	gap: 1rem;
+	overflow-x: auto;
+	padding: 0.5rem 0 0.75rem;
+	scrollbar-width: thin;
 }
 
 .category-chips::-webkit-scrollbar {
-    height: 6px;
+	height: 6px;
 }
 
 .category-chips::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5);
-    border-radius: 999px;
+	background-color: rgba(156, 163, 175, 0.5);
+	border-radius: 999px;
 }
 
 .category-chip {
-    padding: 0.65rem 1.35rem;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #0f172a;
-    background-color: var(--chip-color, #c7d2fe);
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    white-space: nowrap;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+	padding: 0.65rem 1.35rem;
+	border-radius: 999px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	color: #0f172a;
+	background-color: var(--chip-color, #c7d2fe);
+	border: 1px solid rgba(15, 23, 42, 0.08);
+	white-space: nowrap;
+	cursor: pointer;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
 .category-chip:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+	transform: translateY(-2px);
+	box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
 }
 
 .category-sections {
-    margin-top: 2.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
-    scroll-behavior: smooth;
+	margin-top: 2.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.75rem;
+	scroll-behavior: smooth;
 }
 
 .category-card {
-    --category-color: #94a3b8;
-    border: 1px solid rgba(15, 23, 42, 0.06);
-    border-left: 8px solid var(--category-color);
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 1.75rem;
-    box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+	--category-color: #94a3b8;
+	border: 1px solid rgba(15, 23, 42, 0.06);
+	border-left: 8px solid var(--category-color);
+	background-color: #fff;
+	border-radius: 12px;
+	padding: 1.75rem;
+	box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
 }
 
 .category-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 1.25rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-bottom: 1.25rem;
 }
 
 .category-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #0f172a;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #0f172a;
 }
 
 .category-count {
-    font-size: 0.95rem;
-    color: #4b5563;
+	font-size: 0.95rem;
+	color: #4b5563;
 }
 
 .category-expense-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
 }
 
 .category-expense-empty {
-    color: #64748b;
-    font-style: italic;
+	color: #64748b;
+	font-style: italic;
 }
 
 .category-expense-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    font-size: 0.98rem;
-    color: #1f2937;
-    border-bottom: 1px dashed rgba(148, 163, 184, 0.45);
-    padding-bottom: 0.75rem;
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	font-size: 0.98rem;
+	color: #1f2937;
+	border-bottom: 1px dashed rgba(148, 163, 184, 0.45);
+	padding-bottom: 0.75rem;
 }
 
 .category-expense-item:last-of-type {
-    border-bottom: none;
-    padding-bottom: 0;
+	border-bottom: none;
+	padding-bottom: 0;
 }
 
 .category-expense-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	text-align: left;
 }
 
 .category-expense-amount {
-    font-weight: 700;
-    color: #0f172a;
+	font-weight: 700;
+	color: #0f172a;
 }
 
 .category-expense-tags {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: #475569;
+	display: flex;
+	gap: 0.5rem;
+	font-size: 0.85rem;
+	color: #475569;
 }
 
 .category-total {
-    margin-top: 1.25rem;
-    padding-top: 1rem;
-    border-top: 2px solid rgba(148, 163, 184, 0.45);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #0f172a;
-    text-align: right;
+	margin-top: 1.25rem;
+	padding-top: 1rem;
+	border-top: 2px solid rgba(148, 163, 184, 0.45);
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #0f172a;
+	text-align: right;
 }
 
 .categories-empty {
-    margin-top: 2rem;
-    text-align: center;
-    font-size: 1.05rem;
-    color: #475569;
+	margin-top: 2rem;
+	text-align: center;
+	font-size: 1.05rem;
+	color: #475569;
 }
 
 @media (max-width: 768px) {
-    .categories-content {
-        padding: 1.75rem;
-        margin: 2rem 1rem;
-    }
+	.categories-content {
+		padding: 1.75rem;
+		margin: 2rem 1rem;
+	}
 
-    .category-card {
-        padding: 1.35rem;
-    }
+	.category-card {
+		padding: 1.35rem;
+	}
 
-    .category-expense-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+	.category-expense-item {
+		flex-direction: column;
+		align-items: flex-start;
+	}
 
-    .category-total {
-        text-align: left;
-    }
+	.category-total {
+		text-align: left;
+	}
 }

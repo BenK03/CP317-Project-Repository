@@ -117,20 +117,13 @@
 
 /*csv import table*/
 body {
-    font-family: 
-        -apple-system, 
-        BlinkMacSystemFont, 
-        "Segoe UI", 
-        Roboto, 
-        Oxygen-Sans, 
-        Ubuntu, 
-        Cantarell, 
-        "Helvetica Neue", 
-        sans-serif;
-    
-    background-color: #f7f7f7; 
-    color: #333;
-    line-height: 1.6; 
+	font-family:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans,
+		Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+	background-color: #f7f7f7;
+	color: #333;
+	line-height: 1.6;
 }
 
 table {
@@ -186,7 +179,9 @@ td:hover {
 	background: rgba(0, 0, 0, 0.4);
 	opacity: 0;
 	visibility: hidden;
-	transition: opacity 0.2s ease, visibility 0.2s ease;
+	transition:
+		opacity 0.2s ease,
+		visibility 0.2s ease;
 	z-index: 1000;
 }
 
@@ -228,7 +223,10 @@ td:hover {
 	font-weight: 600;
 	cursor: pointer;
 	border: 1px solid transparent;
-	transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease,
+	transition:
+		transform 0.1s ease,
+		box-shadow 0.2s ease,
+		background-color 0.2s ease,
 		color 0.2s ease;
 }
 
@@ -253,67 +251,102 @@ td:hover {
 	background-color: #f2f8f4;
 }
 
-
 .analytics-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
 
-  max-width: 1100px;
-  margin: 4rem auto;
-  padding: 2rem;
+	max-width: 1100px;
+	margin: 4rem auto;
+	padding: 2rem;
 
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  background-color: #f9f9f9;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+	border: 1px solid #e0e0e0;
+	border-radius: 12px;
+	background-color: #f9f9f9;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
 
-  text-align: center; 
+	text-align: center;
 }
-
 
 .charts-row {
-  display: flex;
-  gap: 2rem;
-  width: 100%;
-  justify-content: center;        
+	display: flex;
+	gap: 2rem;
+	width: 100%;
+	justify-content: center;
 }
-
 
 .charts-row-3 .chart-section {
-  flex: 1 1 calc(33.333% - 2rem);
+	flex: 1 1 calc(33.333% - 2rem);
 }
-
 
 .charts-row-2 .chart-section {
-  flex: 1 1 calc(50% - 2rem);
+	flex: 1 1 calc(50% - 2rem);
 }
-
 
 .chart-full {
-  width: 50%; 
-  margin-left: auto;
-  margin-right: auto;
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
 }
-
 
 .chart-section {
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-    margin-left: auto;   
-  margin-right: auto;
-  text-align: center; 
+	background: white;
+	padding: 1rem;
+	border-radius: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
 }
 
-
 @media (max-width: 900px) {
-  .charts-row {
-    flex-direction: column;
-  }
+	.charts-row {
+		flex-direction: column;
+	}
 
-  .charts-row-3 .chart-section,
-  .charts-row-2 .chart-section {
-    flex: 1 1 100%;
-  }
+	.charts-row-3 .chart-section,
+	.charts-row-2 .chart-section {
+		flex: 1 1 100%;
+	}
+}
+
+#pages-container {
+	border: 1px solid #ccc;
+	max-height: 80vh;
+	overflow-y: auto;
+	padding: 0.5rem;
+}
+
+.page-wrapper {
+	position: relative;
+	margin: 0 auto 1.5rem auto;
+	display: inline-block;
+}
+
+.page-label {
+	text-align: center;
+	margin-bottom: 0rem;
+	font-size: 0.9rem;
+	color: #555;
+}
+
+.page-canvas-container {
+	position: relative; /* overlay is positioned relative to this */
+	display: inline-block;
+}
+
+canvas {
+	display: block;
+}
+
+.overlay-canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	pointer-events: none; /* events go to the PDF canvas below */
+}
+
+#info {
+	margin-top: 1rem;
+	white-space: pre-wrap;
+	font-size: 0.9rem;
 }
