@@ -660,3 +660,20 @@ addCategory.addEventListener("keyup", function (event) {
 		addCategory.value = "";
 	}
 });
+// monthly budget input handling
+document.addEventListener("DOMContentLoaded", () => {
+    const budgetInput = document.getElementById("monthly-budget");
+    if (!budgetInput) return;
+
+    const storedBudget = parseFloat(localStorage.getItem("monthlyBudget") || "0");
+    if (!isNaN(storedBudget) && storedBudget > 0) {
+        budgetInput.value = storedBudget;
+    }
+
+    budgetInput.addEventListener("change", () => {
+        const value = parseFloat(budgetInput.value);
+        if (!isNaN(value) && value >= 0) {
+            localStorage.setItem("monthlyBudget", String(value));
+        }
+    });
+});

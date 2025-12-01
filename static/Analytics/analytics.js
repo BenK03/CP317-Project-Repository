@@ -265,22 +265,65 @@ document.addEventListener("DOMContentLoaded", () => {
 		},
 	});
 	// chart 6 total number of expenses per category
-	const categoryNumberTotal = {};
-	for (const e of expenses) {
-		categoryNumberTotal[e.category] =
-			(categoryNumberTotal[e.category] || 0) + 1;
-	}
-	const labels3 = Object.keys(categoryNumberTotal);
-	const values3 = Object.values(categoryNumberTotal);
-	new Chart(document.getElementById("pieChart2"), {
-		type: "pie",
-		data: {
-			labels: labels3,
-			datasets: [
-				{
-					data: values3,
-				},
-			],
-		},
-	});
+    const budgetCanvas = document.getElementById("budget-donut-chart");
+    if (budgetCanvas) {
+        // read stored budget
+        const storedBudget = parseFloat(
+            localStorage.getItem("monthlyBudget") || "0",
+        );
+
+        // if there is no budget yet, use 1 so the donut still draws
+        const budgetValue =
+            !isNaN(storedBudget) && storedBudget > 0 ? storedBudget : 1;
+
+        //check if an expense is in the current month
+        function isInCurrentMonth(dateStr) {
+            const d = parseDateString(dateStr);
+            if (!d) return false;
+            const now = new Date();
+            return (
+                d.getFullYear() === now.getFullYear() &&
+                d.getMonth() === now.getMonth()
+            );
+        }
+
+        // filter expenses for this month and add them up
+        const thisMonthExpenses = expenses.filter((e) =>
+            isInCurrentMonth(e.date),
+        );
+        const monthTotal = thisMonthExpenses.reduce(
+            (sum, e) => sum + Number(e.amount || 0),
+            0,
+        );
+
+        const budget = !isNaN(storedBudget) && storedBudget > 0 ? storedBudget : 0;
+        const remaining = Math.max(budget - monthTotal, 0);
+
+
+        new Chart(budgetCanvas, {
+            type: "doughnut",
+            data: {
+                    labels: ["Remaining Budget", "Total Expenses"],
+                datasets: [
+                    {
+                        // blue for remaining, red for monthly expenses
+                        data: [remaining, monthTotal],
+                        backgroundColor: ["#3b82f6", "#ef4444"],
+                        hoverBackgroundColor: ["#2563eb", "#b91c1c"],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: "bottom" },
+                    title: {
+                        display: true,
+                        text: "Budget view",
+                    },
+                },
+            },
+        });
+        } 
 });
