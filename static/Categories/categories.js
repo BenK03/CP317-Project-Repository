@@ -38,9 +38,9 @@
 	});
 
 	// Read expenses from readExpenses() if available if not read from localStorage
-	async function fetchExpenses() {
+	function fetchExpenses() {
 		if (typeof readExpenses === "function") {
-			return await readExpenses();
+			return readExpenses();
 		}
 
 		// Plan B: read directly from localStorage

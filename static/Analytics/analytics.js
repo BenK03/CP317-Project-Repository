@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", async () => {
-	const expenses = await readExpenses();
+document.addEventListener("DOMContentLoaded", () => {
+	const expenses = readExpenses();
 
 	if (!expenses.length) {
 		alert("No expense data found. Please add some expenses first.");
