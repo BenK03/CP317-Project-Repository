@@ -252,3 +252,68 @@ td:hover {
 .modal-btn.secondary:hover {
 	background-color: #f2f8f4;
 }
+
+
+.analytics-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  max-width: 1100px;
+  margin: 4rem auto;
+  padding: 2rem;
+
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+
+  text-align: center; 
+}
+
+
+.charts-row {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  justify-content: center;        
+}
+
+
+.charts-row-3 .chart-section {
+  flex: 1 1 calc(33.333% - 2rem);
+}
+
+
+.charts-row-2 .chart-section {
+  flex: 1 1 calc(50% - 2rem);
+}
+
+
+.chart-full {
+  width: 50%; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.chart-section {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+    margin-left: auto;   
+  margin-right: auto;
+  text-align: center; 
+}
+
+
+@media (max-width: 900px) {
+  .charts-row {
+    flex-direction: column;
+  }
+
+  .charts-row-3 .chart-section,
+  .charts-row-2 .chart-section {
+    flex: 1 1 100%;
+  }
+}

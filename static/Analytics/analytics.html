@@ -17,38 +17,44 @@
     </ul>
   </nav>
 
-  <main class="page-content">
+    <main class="page-content analytics-layout">
     <h1>Expense Analytics</h1>
 
-    <section class="chart-section">
-      <h2>Daily Spend</h2>
-      <canvas id="categoryChart"></canvas>
-    </section>
+    
+    <div class="charts-row charts-row-3">
+      <section class="chart-section">
+        <h2>Daily Spend</h2>
+        <canvas id="categoryChart"></canvas>
+      </section>
 
-    <section class="chart-section">
+          <section class="chart-section">
+        <h2>Weekly Spend</h2>
+        <canvas id="timeChart"></canvas>
+      </section>
+
+      <section class="chart-section">
+        <h2>Monthly Spend</h2>
+        <canvas id="monthlyChart"></canvas>
+      </section>
+    </div>
+
+    
+    <section class="chart-section chart-full">
       <h2>Budget view</h2>
       <canvas id="budget-donut-chart" width="400" height="400"></canvas>
     </section>
 
-    <section class="chart-section">
-      <h2>Weekly Spend</h2>
-      <canvas id="timeChart"></canvas>
-    </section>
-
-    <section class="chart-section">
-      <h2>Monthly Spend</h2>
-      <canvas id="monthlyChart"></canvas>
-    </section>
-
-    <section class="chart-section">
-      <h2>Impulse vs Planned Purchases</h2>
-      <canvas id="impulseChart"></canvas>
-    </section>
-
-    <section class="chart-section">
-      <h2>Total Expenses By Category</h2>
-      <canvas id="pieChart1"></canvas>
-    </section>
+        
+    <div class="charts-row charts-row-2">
+      <section class="chart-section">
+        <h2>Impulse vs Planned Purchases</h2>
+        <canvas id="impulseChart"></canvas>
+      </section>
+          <section class="chart-section">
+        <h2>Total Expenses By Category</h2>
+        <canvas id="pieChart1"></canvas>
+      </section>
+    </div>
 
   </main>
 
