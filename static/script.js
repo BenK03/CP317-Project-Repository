@@ -14,15 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
 			);
 		}
 		//button that clears local storage
+		/*
 		const clearInput = document.getElementById("btnClearLocalStorage");
 		clearInput.addEventListener("click", (e) => {
 			e.preventDefault();
 			resetExpenses();
 		});
-
+		*/
 		expenseForm.addEventListener("submit", async (event) => {
 			event.preventDefault();
-
+			console.log("test!");
 			// Get the inputs
 			const amountInput = expenseForm.querySelector("#amount");
 			const labelInput = expenseForm.querySelector("#label");
@@ -439,6 +440,9 @@ async function add_transaction(
 	if (expense.impulse === "yes") {
 		const purchaseDate = parseDateString(expense.date);
 		const { count, total } = await getMonthlyImpulseStats(purchaseDate);
+		console.log("Impulse");
+		console.log(count);
+		console.log(total);
 		// if count >= 4 then pop the window up
 		if (count >= 4) {
 			const pendingCount = count + 1;
