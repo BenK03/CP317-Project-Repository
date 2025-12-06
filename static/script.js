@@ -119,8 +119,6 @@ async function runInit() {
 	if (!global_expenses) {
 		global_expenses = await readExpenses();
 	}
-	console.log("Global Expenses");
-	console.log(global_expenses);
 	for (let i = 0; i < global_expenses.length; i++) {
 		add_category(global_expenses[i].category, 0x000);
 	}
@@ -138,10 +136,8 @@ async function readExpenses() {
 	const result = await request.json();
 
 	storedExpenses = result.data;
-	console.log("Loaded json:", storedExpenses);
 
 	if (!storedExpenses) {
-		console.log("nice");
 		return [];
 	}
 
