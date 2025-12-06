@@ -29,107 +29,114 @@
     },
     {
         "amount": 6,
+        "label": "",
         "category": "WLU PARKING SERVICES WATERLOO",
         "impulse": "no",
-        "date": "27/10/2025",
-        "label": ""
+        "date": "27/10/2025"
     },
     {
         "amount": 4.84,
+        "label": "",
         "category": "TIM HORTONS #0473 KITCHENER",
         "impulse": "no",
-        "date": "28/10/2025",
-        "label": ""
+        "date": "28/10/2025"
     },
     {
         "amount": 30.27,
+        "label": "",
         "category": "FOOD BASICS 690 KITCHENER",
         "impulse": "no",
-        "date": "28/10/2025",
-        "label": ""
+        "date": "28/10/2025"
     },
     {
         "amount": 6,
+        "label": "",
         "category": "WLU PARKING SERVICES WATERLOO",
         "impulse": "no",
-        "date": "29/10/2025",
-        "label": ""
+        "date": "29/10/2025"
     },
     {
         "amount": 12.74,
+        "label": "",
         "category": "TIM HORTONS #0473 KITCHENER",
         "impulse": "no",
-        "date": "02/11/2025",
-        "label": ""
+        "date": "02/11/2025"
     },
     {
         "amount": 17.04,
+        "label": "",
         "category": "GLOGOWSKI EURO FOOD KITCHENER",
         "impulse": "no",
-        "date": "03/11/2025",
-        "label": ""
+        "date": "03/11/2025"
     },
     {
         "amount": 23.36,
+        "label": "",
         "category": "GLOGOWSKI EURO FOOD KITCHENER",
         "impulse": "no",
-        "date": "06/11/2025",
-        "label": ""
+        "date": "06/11/2025"
     },
     {
         "amount": 4.84,
+        "label": "",
         "category": "TIM HORTONS #0473 KITCHENER",
         "impulse": "no",
-        "date": "10/11/2025",
-        "label": ""
+        "date": "10/11/2025"
     },
     {
         "amount": 4.84,
+        "label": "",
         "category": "TIM HORTONS #0473 KITCHENER",
         "impulse": "no",
-        "date": "11/11/2025",
-        "label": ""
+        "date": "11/11/2025"
     },
     {
         "amount": 3.38,
+        "label": "",
         "category": "FOOD BASICS 690 KITCHENER",
         "impulse": "no",
-        "date": "11/11/2025",
-        "label": ""
+        "date": "11/11/2025"
     },
     {
         "amount": 38.25,
+        "label": "",
         "category": "CITY PIZZA FISCHER-HAL KITCHENER",
         "impulse": "no",
-        "date": "11/11/2025",
-        "label": ""
+        "date": "11/11/2025"
     },
     {
         "amount": 11.37,
+        "label": "",
         "category": "BULK BARN #644 WATERLO WATERLOO",
         "impulse": "no",
-        "date": "14/11/2025",
-        "label": ""
+        "date": "14/11/2025"
     },
     {
         "amount": 18.19,
+        "label": "",
         "category": "ALMADINA WATERLOO",
         "impulse": "no",
-        "date": "18/11/2025",
-        "label": ""
+        "date": "18/11/2025"
     },
     {
         "amount": 36.16,
+        "label": "",
         "category": "GINO'S PIZZA #4 KITCHENER",
         "impulse": "no",
-        "date": "21/11/2025",
-        "label": ""
+        "date": "21/11/2025"
     },
     {
         "amount": 16.37,
+        "label": "",
         "category": "SUNO INC. SUNO.COM",
         "impulse": "no",
-        "date": "24/11/2025",
+        "date": "24/11/2025"
+    },
+    {
+        "amount": 56,
+        "category": "WLU PARKING SERVICES WATERLOO",
+        "impulse": "yes",
+        "date": "11/11/2025",
         "label": ""
     }
 ]

@@ -14,12 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			);
 		}
 		//button that clears local storage
+		/*
 		const clearInput = document.getElementById("btnClearLocalStorage");
 		clearInput.addEventListener("click", (e) => {
 			e.preventDefault();
 			resetExpenses();
 		});
-
+		*/
 		expenseForm.addEventListener("submit", async (event) => {
 			event.preventDefault();
 
